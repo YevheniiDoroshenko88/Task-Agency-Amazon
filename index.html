@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Web Application</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Custom CSS -->
+  <style>
+    body {
+      padding: 20px;
+    }
+    table {
+      width: 100%;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2>Select a Table</h2>
+  <button onclick="showTable('accountsTablePage')">Accounts</button>
+  <button onclick="showTable('profilesTablePage')">Profiles</button>
+  <button onclick="showTable('campaignsTablePage')">Campaigns</button>
+</div>
+
+<div class="container" id="accountsTablePage">
+  <h2>Accounts</h2>
+  <!-- Додано поле для фільтрації -->
+  <div class="mb-3">
+    <label for="accountsFilter">Filter:</label>
+    <input type="text" id="accountsFilter" oninput="filterTable('accountsTable', this.value)">
+    <button onclick="clearFilter('accountsTable')">Clear</button>
+  </div>
+  <table id="accountsTable" class="table table-striped" onclick="handleTableClick(event, 'profilesTablePage')">
+    <!-- Table headers -->
+    <thead>
+      <tr>
+        <th>Account ID</th>
+        <th>Email</th>
+        <th>Auth Token</th>
+        <th>Creation Date</th>
+      </tr>
+    </thead>
+    <!-- Table body will be populated using JavaScript -->
+    <tbody>
+      <tr data-entity="profile" data-id="1">
+        <td>1</td>
+        <td>example1@email.com</td>
+        <td>token123</td>
+        <td>2022-01-01</td>
+      </tr>
+      <tr data-entity="profile" data-id="2">
+        <td>2</td>
+        <td>example2@email.com</td>
+        <td>token456</td>
+        <td>2022-02-15</td>
+      </tr>
+      <!-- Add more rows as needed -->
+    </tbody>
+  </table>
+</div>
+
+<div class="container" id="profilesTablePage" style="display: none;">
+  <h2>Profiles</h2>
+  <!-- Додано аналогічне поле для фільтрації і в інших таблицях -->
+  <div class="mb-3">
+    <label for="profilesFilter">Filter:</label>
+    <input type="text" id="profilesFilter" oninput="filterTable('profilesTable', this.value)">
+    <button onclick="clearFilter('profilesTable')">Clear</button>
+  </div>
+  <table id="profilesTable" class="table table-striped" onclick="handleTableClick(event, 'campaignsTablePage')">
+    <!-- Table headers -->
+    <thead>
+      <tr>
+        <th>Profile ID</th>
+        <th>Country</th>
+        <th>Marketplace</th>
+      </tr>
+    </thead>
+    <!-- Table body will be populated using JavaScript -->
+    <tbody>
+      <tr data-entity="campaign" data-id="1">
+        <td>1</td>
+        <td>Country1</td>
+        <td>Marketplace1</td>
+      </tr>
+      <tr data-entity="campaign" data-id="2">
+        <td>2</td>
+        <td>Country2</td>
+        <td>Marketplace2</td>
+      </tr>
+      <!-- Add more rows as needed -->
+    </tbody>
+  </table>
+</div>
+
+<div class="container" id="campaignsTablePage" style="display: none;">
+  <h2>Campaigns</h2>
+  <!-- Додано аналогічне поле для фільтрації і в інших таблицях -->
+  <div class="mb-3">
+    <label for="campaignsFilter">Filter:</label>
+    <input type="text" id="campaignsFilter" oninput="filterTable('campaignsTable', this.value)">
+    <button onclick="clearFilter('campaignsTable')">Clear</button>
+  </div>
+  <table id="campaignsTable" class="table table-striped">
+    <!-- Table headers -->
+    <thead>
+      <tr>
+        <th>Campaign ID</th>
+        <th>Clicks</th>
+        <th>Cost</th>
+        <th>Date</th>
+      </tr>
+    </thead>
+    <!-- Table body will be populated using JavaScript -->
+    <tbody>
+      <tr>
+        <td>1</td>
+        <td>100</td>
+        <td>50</td>
+        <td>2022-01-15</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td>150</td>
+        <td>75</td>
+        <td>2022-02-28</td>
+      </tr>
+      <!-- Add more rows as needed -->
+    </tbody>
+  </table>
+</div>
+
+<script>
+  // ... (попередній JavaScript код) ...
+
+  // Функція для фільтрації таблиці за введеним текстом
+  function filterTable(tableId, filterText) {
+    const table = document.getElementById(tableId);
+    const rows = table.getElementsByTagName('tr');
+
+    for (let i = 0; i < rows.length; i++) {
+      const row = rows[i];
+      let found = false;
+
+      // Пропускаємо заголовок таблиці
+      if (i === 0) continue;
+
+      // Шукаємо текст у кожному стовпці
+      for (let j = 0; j < row.cells.length; j++) {
+        const cellText = row.cells[j].textContent.toLowerCase();
+        if (cellText.includes(filterText.toLowerCase())) {
+          found = true;
+          break;
+        }
+      }
+
+      // Відображаємо чи приховуємо рядок залежно від результатів пошуку
+      if (found) {
+        row.style.display = '';
+      } else {
+        row.style.display = 'none';
+      }
+    }
+  }
+
+  // Функція для очищення фільтра
+  function clearFilter(tableId) {
+    document.getElementById(tableId).querySelector('input[type="text"]').value = '';
+    filterTable(tableId, ''); // Викликаємо фільтрацію для скидання фільтру
+  }
+</script>
+
+<!-- Bootstrap JS and Popper.js -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+
+</body>
+</html>
